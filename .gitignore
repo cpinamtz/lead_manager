@@ -1,0 +1,9 @@
+node_modules
+*.pyc
+*.sqlite3
+
+# IDE
+.vscode
+
+# Compiled
+**/static/frontend/main.js
