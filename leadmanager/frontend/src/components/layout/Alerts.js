@@ -14,9 +14,6 @@ export class Alerts extends Component {
     const { error, alert, message } = this.props;
     if (error !== prevProps.error) {
       if (error.msg.name)
-        /* It uses .join due to error messages
-        comes from backend as an array of only
-        one string*/
         alert.error(`Name: ${error.msg.name.join()}`);
       if (error.msg.name)
         alert.error(`Email: ${error.msg.email.join()}`);
@@ -37,9 +34,9 @@ export class Alerts extends Component {
   }
 }
 
-const mapStatetoProps = state => ({
+const mapStateToProps = state => ({
   error: state.errors,
   message: state.messages
 });
 
-export default connect(mapStatetoProps)(withAlert()(Alerts));
+export default connect(mapStateToProps)(withAlert()(Alerts));

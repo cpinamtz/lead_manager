@@ -4,7 +4,9 @@ import { returnErrors } from './messages';
 import {
   USER_LOADED,
   USER_LOADING,
-  AUTH_ERROR
+  AUTH_ERROR,
+  LOGIN_FAIL,
+  LOGIN_SUCCESS,
 } from "./types";
 
 //CHECK TOKEN AND LOAD USER
@@ -18,7 +20,7 @@ export const loadUser = () => (dispatch, getState) => {
   //Headers
   const config = {
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json"
     }
   };
 
@@ -26,17 +28,46 @@ export const loadUser = () => (dispatch, getState) => {
   if (token) {
     config.headers['Authorization'] = `Token ${token}`;
   }
+  console.log(config);
 
-  axios.get('/api/auth/user', config)
-    .then(res => {
+  axios
+    .get('/api/auth/user', config)
+    .then((res) => {
       dispatch({
         type: USER_LOADED,
         payload: res.data
       });
-    }).catch(err => {
+    }).catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));
       dispatch({
         type: AUTH_ERROR
+      });
+    });
+};
+
+//LOGIN USER
+export const login = (username, password) => dispatch => {
+
+  //Headers
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const body = JSON.stringify({ username, password });
+
+  axios.post('/api/auth/login', body, config)
+    .then(res => {
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      dispatch(returnErrors(err.response.data, err.response.status));
+      dispatch({
+        type: LOGIN_FAIL
       });
     });
 };
