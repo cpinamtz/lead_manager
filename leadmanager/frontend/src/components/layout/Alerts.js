@@ -13,12 +13,17 @@ export class Alerts extends Component {
   componentDidUpdate(prevProps) {
     const { error, alert, message } = this.props;
     if (error !== prevProps.error) {
+      /* It uses .join due to error messages
+      comes from backend as an array of only
+      one string*/
       if (error.msg.name)
         alert.error(`Name: ${error.msg.name.join()}`);
       if (error.msg.name)
         alert.error(`Email: ${error.msg.email.join()}`);
       if (error.msg.message)
         alert.error(`Message: ${error.msg.message.join()}`);
+      if (error.msg.non_field_errors)
+        alert.error(error.msg.non_field_errors.join());
     }
 
     if (message !== prevProps.message) {

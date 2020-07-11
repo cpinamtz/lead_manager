@@ -7,6 +7,7 @@ import {
   AUTH_ERROR,
   LOGIN_FAIL,
   LOGIN_SUCCESS,
+  LOGOUT_SUCCESS,
 } from "./types";
 
 //LOAD USER
