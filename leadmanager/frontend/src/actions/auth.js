@@ -9,29 +9,10 @@ import {
   LOGIN_SUCCESS,
 } from "./types";
 
-//CHECK TOKEN AND LOAD USER
+//LOAD USER
 export const loadUser = () => (dispatch, getState) => {
-  // User loading
-  dispatch({ type: USER_LOADING });
-
-  // Get token from state (it comes from localStorage)
-  const token = getState().auth.token;
-
-  //Headers
-  const config = {
-    headers: {
-      "Content-Type": "application/json"
-    }
-  };
-
-  // If token, add to headers
-  if (token) {
-    config.headers['Authorization'] = `Token ${token}`;
-  }
-  console.log(config);
-
   axios
-    .get('/api/auth/user', config)
+    .get('/api/auth/user', tokenConfig(getState))
     .then((res) => {
       dispatch({
         type: USER_LOADED,
@@ -70,4 +51,37 @@ export const login = (username, password) => dispatch => {
         type: LOGIN_FAIL
       });
     });
+};
+// LOGOUT USER
+export const logout = () => (dispatch, getState) => {
+  axios
+    .post('/api/auth/logout', null, tokenConfig(getState))
+    .then(() => {
+      dispatch({
+        type: LOGOUT_SUCCESS
+      });
+    }).catch((err) => {
+      dispatch(returnErrors(err.response.data, err.response.status));
+    });
+};
+
+// Setup config with token - helper function
+export const tokenConfig = getState => {
+  // Get token from state (it comes from localStorage)
+  const token = getState().auth.token;
+
+  //Headers
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  // If token, add to headers
+  if (token) {
+    config.headers['Authorization'] = `Token ${token}`;
+  }
+
+  return config;
+
 };
