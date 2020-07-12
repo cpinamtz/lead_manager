@@ -2,6 +2,10 @@ node_modules
 *.pyc
 *.sqlite3
 
+# Coverage
+*.coverage*
+leadmanager/htmlcov
+
 # IDE
 .vscode
 
