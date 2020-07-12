@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { returnErrors } from './messages';
+import { createMessage, returnErrors } from './messages';
 
 import {
   USER_LOADED,
@@ -9,7 +9,8 @@ import {
   LOGIN_SUCCESS,
   LOGOUT_SUCCESS,
   REGISTER_SUCCESS,
-  REGISTER_FAIL
+  REGISTER_FAIL,
+  UPDATE_SUCCESS
 } from "./types";
 
 //LOAD USER
@@ -54,6 +55,20 @@ export const login = (username, password) => dispatch => {
         type: LOGIN_FAIL
       });
     });
+};
+
+//UPDATE USER
+export const updateUser = user => (dispatch, getState) => {
+
+  axios.patch('/api/auth/user', user, tokenConfig(getState))
+    .then(res => {
+      dispatch(createMessage({ updateUser: "User updated" }));
+      dispatch({
+        type: UPDATE_SUCCESS,
+        payload: res.data
+      });
+    })
+    .catch(err => console.log(err));
 };
 
 //REGISTER USER
